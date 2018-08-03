@@ -1,35 +1,40 @@
 <template>
-  <div class="v-step" :id="'v-step-' + hash" :ref="'v-step-' + hash">
-    <slot name="header">
-      <div v-if="step.header" class="v-step__header">
-        <div v-if="step.header.title" v-html="step.header.title"></div>
-      </div>
-    </slot>
+  <div class="v-step-parent">
+    <div class="v-step" :id="'v-step-' + hash" :ref="'v-step-' + hash">
+      <slot name="header">
+        <div v-if="step.header" class="v-step__header">
+          <div v-if="step.header.title" v-html="step.header.title"></div>
+        </div>
+      </slot>
 
-    <slot name="content">
-      <div class="v-step__content">
-        <div v-if="step.content" v-html="step.content"></div>
-        <div v-else>This is a demo step! The id of this step is {{ hash }} and it targets {{ step.target }}.</div>
-      </div>
-    </slot>
+      <slot name="content">
+        <div class="v-step__content">
+          <div v-if="step.content" v-html="step.content"></div>
+          <div v-else>This is a demo step! The id of this step is {{ hash }} and it targets {{ step.target }}.</div>
+        </div>
+      </slot>
 
-    <slot name="actions">
-      <div class="v-step__buttons">
-        <button @click="stop" v-if="!isLast" class="v-step__button">Skip tour</button>
-        <button @click="previousStep" v-if="!isFirst" class="v-step__button">Previous</button>
-        <button @click="nextStep" v-if="!isLast" class="v-step__button">Next</button>
-        <button @click="stop" v-if="isLast" class="v-step__button">Finish</button>
-      </div>
-    </slot>
+      <slot name="actions">
+        <div class="v-step__buttons">
+          <button @click="stop" v-if="!isLast" class="v-step__button">Skip tour</button>
+          <button @click="previousStep" v-if="!isFirst" class="v-step__button">Previous</button>
+          <button @click="nextStep" v-if="!isLast" class="v-step__button">Next</button>
+          <button @click="stop" v-if="isLast" class="v-step__button">Finish</button>
+        </div>
+      </slot>
 
-    <div class="v-step__arrow" :class="{ 'v-step__arrow--dark': step.header && step.header.title }"></div>
+      <div class="v-step__arrow" :class="{ 'v-step__arrow--dark': step.header && step.header.title }"></div>
+    </div>
+
+    <v-circlemask class="mask" v-if="hasCircleHighlight" :circle="circle" />
+    <v-rectanglemask class="mask" v-if="hasRectangleHighlight" :rectangle="rectangle" />
   </div>
 </template>
 
 <script>
 import Popper from 'popper.js'
 import sum from 'hash-sum'
-import { DEFAULT_STEP_OPTIONS } from '../shared/constants'
+import { DEFAULT_STEP_OPTIONS, HIGHLIGHT_SHAPES } from '../shared/constants.js'
 
 export default {
   name: 'v-step',
@@ -55,7 +60,10 @@ export default {
   },
   data () {
     return {
-      hash: sum(this.step.target)
+      hash: sum(this.step.target),
+      target: null,
+      rectangleTargetBoundingRect: null,
+      circleTargetBoundingRect: null
     }
   },
   computed: {
@@ -63,6 +71,77 @@ export default {
       return {
         ...DEFAULT_STEP_OPTIONS,
         ...this.step.params
+      }
+    },
+    highlightShape () {
+      if (this.params.shape) {
+        return this.params.shape
+      } else {
+        return HIGHLIGHT_SHAPES.NONE
+      }
+    },
+    hasRectangleHighlight () {
+      return this.params.shape === HIGHLIGHT_SHAPES.RECTANGLE
+    },
+    hasCircleHighlight () {
+      return this.params.shape === HIGHLIGHT_SHAPES.CIRCLE
+    },
+    rectangle () {
+      if (this.rectangleTargetBoundingRect) {
+        const rectangle = {
+          x: this.rectangleTargetBoundingRect.left,
+          y: this.rectangleTargetBoundingRect.top,
+          width: this.rectangleTargetBoundingRect.right - this.rectangleTargetBoundingRect.left,
+          height: this.rectangleTargetBoundingRect.bottom - this.rectangleTargetBoundingRect.top
+        }
+        return rectangle
+      } else {
+        return {
+          x: 50,
+          y: 50,
+          width: 100,
+          height: 200
+        }
+      }
+    },
+    circle () {
+      if (this.circleTargetBoundingRect) {
+        const circleX = Math.round(this.circleTargetBoundingRect.left + this.circleTargetBoundingRect.width / 2)
+        const circleY = Math.round(this.circleTargetBoundingRect.top + this.circleTargetBoundingRect.height / 2)
+        const circleRadius = Math.sqrt(Math.pow(this.circleTargetBoundingRect.width / 2, 2) + Math.pow(this.circleTargetBoundingRect.height / 2, 2))
+
+        return {
+          x: circleX,
+          y: circleY,
+          radius: circleRadius
+        }
+      } else {
+        return {
+          x: 100,
+          y: 100,
+          gradius: 50
+        }
+      }
+    }
+  },
+  methods: {
+    onResize () {
+      console.log('onResize')
+      this.computeCircle()
+      this.computeRectangle()
+    },
+    computeCircle () {
+      console.log('computeCircle')
+      if (this.target) {
+        console.log('Target is here')
+        this.circleTargetBoundingRect = this.target.getBoundingClientRect()
+      }
+    },
+    computeRectangle () {
+      console.log('computeRectangle')
+      if (this.target) {
+        console.log('Target is here')
+        this.rectangleTargetBoundingRect = this.target.getBoundingClientRect()
       }
     }
   },
@@ -81,6 +160,11 @@ export default {
         this.$refs['v-step-' + this.hash],
         this.params
       )
+
+      this.target = targetElement
+      console.log('mounted')
+      this.computeCircle()
+      this.computeRectangle()
     } else {
       console.error('[Vue Tour] The target element ' + this.step.target + ' of .v-step[id="' + this.hash + '"] does not exist!')
       this.stop()
@@ -90,6 +174,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .v-step-parent {
+    position: absolute;
+  }
+
+  .mask {
+    z-index: 2000;
+  }
+
   .v-step {
     background: #50596c; /* #ffc107, #35495e */
     color: white;
@@ -98,6 +190,7 @@ export default {
     filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
     padding: 1rem;
     text-align: center;
+    z-index: 2001;
   }
 
   .v-step .v-step__arrow {

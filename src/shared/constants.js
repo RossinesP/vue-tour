@@ -19,3 +19,9 @@ export const KEYS = {
   ARROW_LEFT: 37,
   ESCAPE: 27
 }
+
+export const HIGHLIGHT_SHAPES = {
+  NONE: 'none',
+  CIRCLE: 'circle',
+  RECTANGLE: 'rectangle'
+}

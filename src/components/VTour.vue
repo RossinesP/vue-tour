@@ -13,6 +13,7 @@
       <v-step
         v-if="currentStep === index"
         v-for="(step, index) of steps"
+        ref="steps"
         :key="index"
         :step="step"
         :previous-step="previousStep"
@@ -62,12 +63,18 @@ export default {
     if (this.customOptions.useKeyboardNavigation) {
       window.addEventListener('keyup', this.handleKeyup)
     }
+
+    window.addEventListener('resize', this.onResize)
+    window.addEventListener('scroll', this.onResize)
   },
   beforeDestroy () {
     // Remove the keyup listener if it has been defined
     if (this.customOptions.useKeyboardNavigation) {
       window.removeEventListener('keyup', this.handleKeyup)
     }
+
+    window.removeEventListener('resize', this.onResize)
+    window.removeEventListener('scroll', this.onResize)
   },
   computed: {
     // Allow us to define custom options and merge them with the default options.
@@ -121,6 +128,15 @@ export default {
     stop () {
       this.customCallbacks.onStop()
       this.currentStep = -1
+    },
+
+    onResize () {
+      // TODO : call onResize for each step element
+      if (this.$refs.steps) {
+        this.$refs.steps.forEach((el) => {
+          el.onResize()
+        })
+      }
     },
 
     handleKeyup (e) {

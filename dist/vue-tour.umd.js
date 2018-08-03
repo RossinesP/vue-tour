@@ -176,13 +176,6 @@ module.exports = __webpack_require__("bUqO") ? function (object, key, value) {
 
 /***/ }),
 
-/***/ "6rc8":
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
 /***/ "7gX0":
 /***/ (function(module, exports) {
 
@@ -330,6 +323,13 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ "MUPu":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "NHnr":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -363,9 +363,15 @@ var KEYS = {
   ARROW_LEFT: 37,
   ESCAPE: 27
 };
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"D://_Dev//2018_02//vue-tour//node_modules//.cache//cache-loader"}!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/VTour.vue
+var HIGHLIGHT_SHAPES = {
+  NONE: 'none',
+  CIRCLE: 'circle',
+  RECTANGLE: 'rectangle'
+};
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"/home/pierre/Developpements/git/vue-tour/node_modules/.cache/cache-loader"}!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/VTour.vue
 
 
+//
 //
 //
 //
@@ -434,12 +440,18 @@ var KEYS = {
     if (this.customOptions.useKeyboardNavigation) {
       window.addEventListener('keyup', this.handleKeyup);
     }
+
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('scroll', this.onResize);
   },
   beforeDestroy: function beforeDestroy() {
     // Remove the keyup listener if it has been defined
     if (this.customOptions.useKeyboardNavigation) {
       window.removeEventListener('keyup', this.handleKeyup);
     }
+
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('scroll', this.onResize);
   },
   computed: {
     // Allow us to define custom options and merge them with the default options.
@@ -491,6 +503,14 @@ var KEYS = {
       this.customCallbacks.onStop();
       this.currentStep = -1;
     },
+    onResize: function onResize() {
+      // TODO : call onResize for each step element
+      if (this.$refs.steps) {
+        this.$refs.steps.forEach(function (el) {
+          el.onResize();
+        });
+      }
+    },
     handleKeyup: function handleKeyup(e) {
       // TODO: debug mode
       // console.log('[Vue Tour] A keyup event occured:', e)
@@ -510,8 +530,8 @@ var KEYS = {
     }
   }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-43233ee6","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VTour.vue
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"v-tour"},[_vm._t("default",_vm._l((_vm.steps),function(step,index){return (_vm.currentStep === index)?_c('v-step',{key:index,attrs:{"step":step,"previous-step":_vm.previousStep,"next-step":_vm.nextStep,"stop":_vm.stop,"isFirst":_vm.isFirst,"isLast":_vm.isLast}}):_vm._e()}),{currentStep:_vm.currentStep,steps:_vm.steps,previousStep:_vm.previousStep,nextStep:_vm.nextStep,stop:_vm.stop,isFirst:_vm.isFirst,isLast:_vm.isLast})],2)}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-fcde8130","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VTour.vue
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"v-tour"},[_vm._t("default",_vm._l((_vm.steps),function(step,index){return (_vm.currentStep === index)?_c('v-step',{key:index,ref:"steps",refInFor:true,attrs:{"step":step,"previous-step":_vm.previousStep,"next-step":_vm.nextStep,"stop":_vm.stop,"isFirst":_vm.isFirst,"isLast":_vm.isLast}}):_vm._e()}),{currentStep:_vm.currentStep,steps:_vm.steps,previousStep:_vm.previousStep,nextStep:_vm.nextStep,stop:_vm.stop,isFirst:_vm.isFirst,isLast:_vm.isLast})],2)}
 var staticRenderFns = []
 
 // CONCATENATED MODULE: ./node_modules/vue-loader/lib/runtime/component-normalizer.js
@@ -651,8 +671,13 @@ var popper = __webpack_require__("Zgw8");
 var hash_sum = __webpack_require__("/uYw");
 var hash_sum_default = /*#__PURE__*/__webpack_require__.n(hash_sum);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"D://_Dev//2018_02//vue-tour//node_modules//.cache//cache-loader"}!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/VStep.vue
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"/home/pierre/Developpements/git/vue-tour/node_modules/.cache/cache-loader"}!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/VStep.vue
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -708,12 +733,87 @@ var hash_sum_default = /*#__PURE__*/__webpack_require__.n(hash_sum);
   },
   data: function data() {
     return {
-      hash: hash_sum_default()(this.step.target)
+      hash: hash_sum_default()(this.step.target),
+      target: null,
+      rectangleTargetBoundingRect: null,
+      circleTargetBoundingRect: null
     };
   },
   computed: {
     params: function params() {
       return Object.assign({}, DEFAULT_STEP_OPTIONS, this.step.params);
+    },
+    highlightShape: function highlightShape() {
+      if (this.params.shape) {
+        return this.params.shape;
+      } else {
+        return HIGHLIGHT_SHAPES.NONE;
+      }
+    },
+    hasRectangleHighlight: function hasRectangleHighlight() {
+      return this.params.shape === HIGHLIGHT_SHAPES.RECTANGLE;
+    },
+    hasCircleHighlight: function hasCircleHighlight() {
+      return this.params.shape === HIGHLIGHT_SHAPES.CIRCLE;
+    },
+    rectangle: function rectangle() {
+      if (this.rectangleTargetBoundingRect) {
+        var rectangle = {
+          x: this.rectangleTargetBoundingRect.left,
+          y: this.rectangleTargetBoundingRect.top,
+          width: this.rectangleTargetBoundingRect.right - this.rectangleTargetBoundingRect.left,
+          height: this.rectangleTargetBoundingRect.bottom - this.rectangleTargetBoundingRect.top
+        };
+        return rectangle;
+      } else {
+        return {
+          x: 50,
+          y: 50,
+          width: 100,
+          height: 200
+        };
+      }
+    },
+    circle: function circle() {
+      if (this.circleTargetBoundingRect) {
+        var circleX = Math.round(this.circleTargetBoundingRect.left + this.circleTargetBoundingRect.width / 2);
+        var circleY = Math.round(this.circleTargetBoundingRect.top + this.circleTargetBoundingRect.height / 2);
+        var circleRadius = Math.sqrt(Math.pow(this.circleTargetBoundingRect.width / 2, 2) + Math.pow(this.circleTargetBoundingRect.height / 2, 2));
+        return {
+          x: circleX,
+          y: circleY,
+          radius: circleRadius
+        };
+      } else {
+        return {
+          x: 100,
+          y: 100,
+          gradius: 50
+        };
+      }
+    }
+  },
+  methods: {
+    onResize: function onResize() {
+      console.log('onResize');
+      this.computeCircle();
+      this.computeRectangle();
+    },
+    computeCircle: function computeCircle() {
+      console.log('computeCircle');
+
+      if (this.target) {
+        console.log('Target is here');
+        this.circleTargetBoundingRect = this.target.getBoundingClientRect();
+      }
+    },
+    computeRectangle: function computeRectangle() {
+      console.log('computeRectangle');
+
+      if (this.target) {
+        console.log('Target is here');
+        this.rectangleTargetBoundingRect = this.target.getBoundingClientRect();
+      }
     }
   },
   mounted: function mounted() {
@@ -727,19 +827,23 @@ var hash_sum_default = /*#__PURE__*/__webpack_require__.n(hash_sum);
       /* eslint-disable no-new */
 
       new popper["a" /* default */](targetElement, this.$refs['v-step-' + this.hash], this.params);
+      this.target = targetElement;
+      console.log('mounted');
+      this.computeCircle();
+      this.computeRectangle();
     } else {
       console.error('[Vue Tour] The target element ' + this.step.target + ' of .v-step[id="' + this.hash + '"] does not exist!');
       this.stop();
     }
   }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-570be51d","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VStep.vue
-var VStep_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:'v-step-' + _vm.hash,staticClass:"v-step",attrs:{"id":'v-step-' + _vm.hash}},[_vm._t("header",[(_vm.step.header)?_c('div',{staticClass:"v-step__header"},[(_vm.step.header.title)?_c('div',{domProps:{"innerHTML":_vm._s(_vm.step.header.title)}}):_vm._e()]):_vm._e()]),_vm._v(" "),_vm._t("content",[_c('div',{staticClass:"v-step__content"},[(_vm.step.content)?_c('div',{domProps:{"innerHTML":_vm._s(_vm.step.content)}}):_c('div',[_vm._v("This is a demo step! The id of this step is "+_vm._s(_vm.hash)+" and it targets "+_vm._s(_vm.step.target)+".")])])]),_vm._v(" "),_vm._t("actions",[_c('div',{staticClass:"v-step__buttons"},[(!_vm.isLast)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.stop}},[_vm._v("Skip tour")]):_vm._e(),_vm._v(" "),(!_vm.isFirst)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.previousStep}},[_vm._v("Previous")]):_vm._e(),_vm._v(" "),(!_vm.isLast)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.nextStep}},[_vm._v("Next")]):_vm._e(),_vm._v(" "),(_vm.isLast)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.stop}},[_vm._v("Finish")]):_vm._e()])]),_vm._v(" "),_c('div',{staticClass:"v-step__arrow",class:{ 'v-step__arrow--dark': _vm.step.header && _vm.step.header.title }})],2)}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-667d84a9","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VStep.vue
+var VStep_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"v-step-parent"},[_c('div',{ref:'v-step-' + _vm.hash,staticClass:"v-step",attrs:{"id":'v-step-' + _vm.hash}},[_vm._t("header",[(_vm.step.header)?_c('div',{staticClass:"v-step__header"},[(_vm.step.header.title)?_c('div',{domProps:{"innerHTML":_vm._s(_vm.step.header.title)}}):_vm._e()]):_vm._e()]),_vm._v(" "),_vm._t("content",[_c('div',{staticClass:"v-step__content"},[(_vm.step.content)?_c('div',{domProps:{"innerHTML":_vm._s(_vm.step.content)}}):_c('div',[_vm._v("This is a demo step! The id of this step is "+_vm._s(_vm.hash)+" and it targets "+_vm._s(_vm.step.target)+".")])])]),_vm._v(" "),_vm._t("actions",[_c('div',{staticClass:"v-step__buttons"},[(!_vm.isLast)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.stop}},[_vm._v("Skip tour")]):_vm._e(),_vm._v(" "),(!_vm.isFirst)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.previousStep}},[_vm._v("Previous")]):_vm._e(),_vm._v(" "),(!_vm.isLast)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.nextStep}},[_vm._v("Next")]):_vm._e(),_vm._v(" "),(_vm.isLast)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.stop}},[_vm._v("Finish")]):_vm._e()])]),_vm._v(" "),_c('div',{staticClass:"v-step__arrow",class:{ 'v-step__arrow--dark': _vm.step.header && _vm.step.header.title }})],2),_vm._v(" "),(_vm.hasCircleHighlight)?_c('v-circlemask',{staticClass:"mask",attrs:{"circle":_vm.circle}}):_vm._e(),_vm._v(" "),(_vm.hasRectangleHighlight)?_c('v-rectanglemask',{staticClass:"mask",attrs:{"rectangle":_vm.rectangle}}):_vm._e()],1)}
 var VStep_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/components/VStep.vue
 function injectStyle (context) {
-  __webpack_require__("6rc8")
+  __webpack_require__("dMx6")
 }
 /* script */
 
@@ -751,7 +855,7 @@ var VStep___vue_template_functional__ = false
 /* styles */
 var VStep___vue_styles__ = injectStyle
 /* scopeId */
-var VStep___vue_scopeId__ = "data-v-570be51d"
+var VStep___vue_scopeId__ = "data-v-667d84a9"
 /* moduleIdentifier (server only) */
 var VStep___vue_module_identifier__ = null
 
@@ -767,14 +871,194 @@ var VStep_Component = normalizeComponent(
 
 /* harmony default export */ var components_VStep = (VStep_Component.exports);
 
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"/home/pierre/Developpements/git/vue-tour/node_modules/.cache/cache-loader"}!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/CircleMask.vue
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ var CircleMask = ({
+  name: 'v-circlemask',
+  props: {
+    circle: {
+      type: Object,
+      required: true,
+      default: function _default() {
+        return {
+          x: 0,
+          y: 0,
+          radius: 50
+        };
+      }
+    }
+  },
+  computed: {
+    svgPath: function svgPath() {
+      var cx = this.circle.x;
+      var cy = this.circle.y;
+      var r = this.circle.radius;
+      var d = r * 2; // This bounding rect declaration is disgusting
+      // but this is the only way I found to make it work
+
+      var boundingRect = {
+        x: 0,
+        y: 0,
+        top: 0,
+        left: 0,
+        bottom: 99999,
+        right: 99999,
+        width: 99999,
+        height: 99999
+      };
+      var overlayWidth = boundingRect.right - boundingRect.left;
+      var overlayHeight = boundingRect.bottom - boundingRect.top; // returns a SVG path of a box with a circle excluded.
+      // This is done by drawing two arcs to create the circle, then drawing the box around
+
+      return "M ".concat(cx, " ").concat(cy, " ") + "m 0,-".concat(r, "  ") + "a ".concat(r, ",").concat(r, " 1 0,1 0,").concat(d, " ") + "a ".concat(r, ",").concat(r, " 1 0,1 0,-").concat(d, " ") + "L 0 ".concat(cx, " ") + "L 0 ".concat(overlayWidth, " ") + "L ".concat(overlayHeight, " ").concat(overlayWidth, " ") + "L ".concat(overlayHeight, " 0 ") + 'L 0 0 ' + "L 0 ".concat(cx, " ") + 'Z';
+    }
+  }
+});
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-869d8764","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/CircleMask.vue
+var CircleMask_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"parent"},[_c('div',{ref:"overlay",staticClass:"overlay"},[_c('svg',{attrs:{"xmlns":"http://www.w3.org/2000/svg"}},[_c('def',[_c('clipPath',{attrs:{"id":"svgPath"}},[_c('path',{attrs:{"d":_vm.svgPath}})])])],1)])])}
+var CircleMask_staticRenderFns = []
+
+// CONCATENATED MODULE: ./src/components/CircleMask.vue
+function CircleMask_injectStyle (context) {
+  __webpack_require__("URaZ")
+}
+/* script */
+
+
+/* template */
+
+/* template functional */
+var CircleMask___vue_template_functional__ = false
+/* styles */
+var CircleMask___vue_styles__ = CircleMask_injectStyle
+/* scopeId */
+var CircleMask___vue_scopeId__ = "data-v-869d8764"
+/* moduleIdentifier (server only) */
+var CircleMask___vue_module_identifier__ = null
+
+var CircleMask_Component = normalizeComponent(
+  CircleMask,
+  CircleMask_render,
+  CircleMask_staticRenderFns,
+  CircleMask___vue_template_functional__,
+  CircleMask___vue_styles__,
+  CircleMask___vue_scopeId__,
+  CircleMask___vue_module_identifier__
+)
+
+/* harmony default export */ var components_CircleMask = (CircleMask_Component.exports);
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"/home/pierre/Developpements/git/vue-tour/node_modules/.cache/cache-loader"}!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/RectangleMask.vue
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ var RectangleMask = ({
+  name: 'v-rectanglemask',
+  props: {
+    rectangle: {
+      type: Object,
+      required: true,
+      default: function _default() {
+        return {
+          x: 0,
+          y: 0,
+          width: 50,
+          height: 30
+        };
+      }
+    }
+  },
+  computed: {
+    svgPath: function svgPath() {
+      // This bounding rect declaration is disgusting
+      // but this is the only way I found to make it work
+      var boundingRect = {
+        x: 0,
+        y: 0,
+        top: 0,
+        left: 0,
+        bottom: 99999,
+        right: 99999,
+        width: 99999,
+        height: 99999
+      };
+      var overlayWidth = boundingRect.right - boundingRect.left;
+      var overlayHeight = boundingRect.bottom - boundingRect.top;
+      var path = "M ".concat(this.rectangle.x, " ").concat(this.rectangle.y, " ") + "l 0 ".concat(this.rectangle.height, " ") + "l ".concat(this.rectangle.width, " 0 ") + "l 0 -".concat(this.rectangle.height, " ") + "l -".concat(this.rectangle.width, " 0 ") + "L ".concat(this.rectangle.x, " 0 ") + "L ".concat(overlayWidth, " 0 ") + "L ".concat(overlayWidth, " ").concat(overlayHeight, " ") + "L 0 ".concat(overlayHeight, " ") + 'L 0 0 ' + "L ".concat(this.rectangle.x, " 0 ") + 'Z';
+      return path;
+    }
+  }
+});
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-208e4450","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/RectangleMask.vue
+var RectangleMask_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"parent"},[_c('div',{ref:"overlay",staticClass:"overlay"},[_c('svg',{attrs:{"xmlns":"http://www.w3.org/2000/svg"}},[_c('def',[_c('clipPath',{attrs:{"id":"svgPath"}},[_c('path',{attrs:{"d":_vm.svgPath}})])])],1)])])}
+var RectangleMask_staticRenderFns = []
+
+// CONCATENATED MODULE: ./src/components/RectangleMask.vue
+function RectangleMask_injectStyle (context) {
+  __webpack_require__("MUPu")
+}
+/* script */
+
+
+/* template */
+
+/* template functional */
+var RectangleMask___vue_template_functional__ = false
+/* styles */
+var RectangleMask___vue_styles__ = RectangleMask_injectStyle
+/* scopeId */
+var RectangleMask___vue_scopeId__ = "data-v-208e4450"
+/* moduleIdentifier (server only) */
+var RectangleMask___vue_module_identifier__ = null
+
+var RectangleMask_Component = normalizeComponent(
+  RectangleMask,
+  RectangleMask_render,
+  RectangleMask_staticRenderFns,
+  RectangleMask___vue_template_functional__,
+  RectangleMask___vue_styles__,
+  RectangleMask___vue_scopeId__,
+  RectangleMask___vue_module_identifier__
+)
+
+/* harmony default export */ var components_RectangleMask = (RectangleMask_Component.exports);
+
 // CONCATENATED MODULE: ./src/main.js
+
+
 
 
 
 var VueTour = {
   install: function install(Vue, options) {
     Vue.component(components_VTour.name, components_VTour);
-    Vue.component(components_VStep.name, components_VStep); // Object containing Tour objects (see VTour.vue) where the tour name is used as key
+    Vue.component(components_VStep.name, components_VStep);
+    Vue.component(components_CircleMask.name, components_CircleMask);
+    Vue.component(components_RectangleMask.name, components_RectangleMask); // Object containing Tour objects (see VTour.vue) where the tour name is used as key
 
     Vue.prototype.$tours = {};
   }
@@ -920,6 +1204,13 @@ module.exports = function (it) {
   return typeof it === 'object' ? it !== null : typeof it === 'function';
 };
 
+
+/***/ }),
+
+/***/ "URaZ":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ }),
 
@@ -3428,6 +3719,13 @@ module.exports = !__webpack_require__("zgIt")(function () {
   return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
 });
 
+
+/***/ }),
+
+/***/ "dMx6":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ }),
 
