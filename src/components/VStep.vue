@@ -80,6 +80,13 @@ export default {
         return HIGHLIGHT_SHAPES.NONE
       }
     },
+    highlightPadding () {
+      if (this.params.padding) {
+        return this.params.padding
+      } else {
+        return 0
+      }
+    },
     hasRectangleHighlight () {
       return this.params.shape === HIGHLIGHT_SHAPES.RECTANGLE
     },
@@ -89,10 +96,10 @@ export default {
     rectangle () {
       if (this.rectangleTargetBoundingRect) {
         const rectangle = {
-          x: this.rectangleTargetBoundingRect.left,
-          y: this.rectangleTargetBoundingRect.top,
-          width: this.rectangleTargetBoundingRect.right - this.rectangleTargetBoundingRect.left,
-          height: this.rectangleTargetBoundingRect.bottom - this.rectangleTargetBoundingRect.top
+          x: this.rectangleTargetBoundingRect.left - this.highlightPadding,
+          y: this.rectangleTargetBoundingRect.top - this.highlightPadding,
+          width: this.rectangleTargetBoundingRect.right - this.rectangleTargetBoundingRect.left + 2 * this.highlightPadding,
+          height: this.rectangleTargetBoundingRect.bottom - this.rectangleTargetBoundingRect.top + 2 * this.highlightPadding
         }
         return rectangle
       } else {
@@ -108,7 +115,7 @@ export default {
       if (this.circleTargetBoundingRect) {
         const circleX = Math.round(this.circleTargetBoundingRect.left + this.circleTargetBoundingRect.width / 2)
         const circleY = Math.round(this.circleTargetBoundingRect.top + this.circleTargetBoundingRect.height / 2)
-        const circleRadius = Math.sqrt(Math.pow(this.circleTargetBoundingRect.width / 2, 2) + Math.pow(this.circleTargetBoundingRect.height / 2, 2))
+        const circleRadius = Math.sqrt(Math.pow(this.circleTargetBoundingRect.width / 2, 2) + Math.pow(this.circleTargetBoundingRect.height / 2, 2)) + this.highlightPadding
 
         return {
           x: circleX,
