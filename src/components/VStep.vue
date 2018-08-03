@@ -26,8 +26,14 @@
       <div class="v-step__arrow" :class="{ 'v-step__arrow--dark': step.header && step.header.title }"></div>
     </div>
 
-    <v-circlemask class="mask" v-if="hasCircleHighlight" :circle="circle" />
-    <v-rectanglemask class="mask" v-if="hasRectangleHighlight" :rectangle="rectangle" />
+    <v-circlemask class="mask"
+                  v-if="hasCircleHighlight"
+                  :circle="circle"
+                  :overlay-background="highlightBackground" />
+    <v-rectanglemask  class="mask"
+                      v-if="hasRectangleHighlight"
+                      :rectangle="rectangle"
+                      :overlay-background="highlightBackground" />
   </div>
 </template>
 
@@ -74,24 +80,31 @@ export default {
       }
     },
     highlightShape () {
-      if (this.params.shape) {
-        return this.params.shape
+      if (this.params.overlayShape) {
+        return this.params.overlayShape
       } else {
         return HIGHLIGHT_SHAPES.NONE
       }
     },
     highlightPadding () {
-      if (this.params.padding) {
-        return this.params.padding
+      if (this.params.overlayPadding) {
+        return this.params.overlayPadding
       } else {
         return 0
       }
     },
+    highlightBackground () {
+      if (this.params.overlayBackground) {
+        return this.params.overlayBackground
+      } else {
+        return 'rgba(0, 0, 0, 0.75)'
+      }
+    },
     hasRectangleHighlight () {
-      return this.params.shape === HIGHLIGHT_SHAPES.RECTANGLE
+      return this.highlightShape === HIGHLIGHT_SHAPES.RECTANGLE
     },
     hasCircleHighlight () {
-      return this.params.shape === HIGHLIGHT_SHAPES.CIRCLE
+      return this.highlightShape === HIGHLIGHT_SHAPES.CIRCLE
     },
     rectangle () {
       if (this.rectangleTargetBoundingRect) {

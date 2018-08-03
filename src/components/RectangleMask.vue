@@ -13,8 +13,11 @@
 </template>
 
 <script>
+import Background from '@/mixins/Background.vue'
+
 export default {
   name: 'v-rectanglemask',
+  mixins: [ Background ],
   props: {
     rectangle: {
       type: Object,

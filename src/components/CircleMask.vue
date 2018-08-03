@@ -1,6 +1,6 @@
 <template>
   <div class="parent">
-    <div class="overlay" ref="overlay">
+    <div class="overlay" ref="overlay" :style="style">
       <svg xmlns="http://www.w3.org/2000/svg">
         <def>
           <clipPath id="svgPath">
@@ -13,8 +13,11 @@
 </template>
 
 <script>
+import Background from '@/mixins/Background.vue'
+
 export default {
   name: 'v-circlemask',
+  mixins: [ Background ],
   props: {
     circle: {
       type: Object,
@@ -84,7 +87,7 @@ export default {
     left: 0px;
     width: 100%;
     min-height: 100%;
-    background-color: rgba(0, 0, 0, 0.75);
+    /* background-color: rgba(0, 0, 0, 0.75); */
     clip-path: url(#svgPath);
     pointer-events: visiblePainted;
   }
