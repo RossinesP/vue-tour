@@ -314,13 +314,6 @@ module.exports = function (it) {
 
 /***/ }),
 
-/***/ "MUPu":
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
 /***/ "NHnr":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -697,6 +690,12 @@ var hash_sum_default = /*#__PURE__*/__webpack_require__.n(hash_sum);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -735,25 +734,39 @@ var hash_sum_default = /*#__PURE__*/__webpack_require__.n(hash_sum);
       return Object.assign({}, DEFAULT_STEP_OPTIONS, this.step.params);
     },
     highlightShape: function highlightShape() {
-      if (this.params.shape) {
-        return this.params.shape;
+      if (this.params.overlayShape) {
+        return this.params.overlayShape;
       } else {
         return HIGHLIGHT_SHAPES.NONE;
       }
     },
+    highlightPadding: function highlightPadding() {
+      if (this.params.overlayPadding) {
+        return this.params.overlayPadding;
+      } else {
+        return 0;
+      }
+    },
+    highlightBackground: function highlightBackground() {
+      if (this.params.overlayBackground) {
+        return this.params.overlayBackground;
+      } else {
+        return 'rgba(0, 0, 0, 0.75)';
+      }
+    },
     hasRectangleHighlight: function hasRectangleHighlight() {
-      return this.params.shape === HIGHLIGHT_SHAPES.RECTANGLE;
+      return this.highlightShape === HIGHLIGHT_SHAPES.RECTANGLE;
     },
     hasCircleHighlight: function hasCircleHighlight() {
-      return this.params.shape === HIGHLIGHT_SHAPES.CIRCLE;
+      return this.highlightShape === HIGHLIGHT_SHAPES.CIRCLE;
     },
     rectangle: function rectangle() {
       if (this.rectangleTargetBoundingRect) {
         var rectangle = {
-          x: this.rectangleTargetBoundingRect.left,
-          y: this.rectangleTargetBoundingRect.top,
-          width: this.rectangleTargetBoundingRect.right - this.rectangleTargetBoundingRect.left,
-          height: this.rectangleTargetBoundingRect.bottom - this.rectangleTargetBoundingRect.top
+          x: this.rectangleTargetBoundingRect.left - this.highlightPadding,
+          y: this.rectangleTargetBoundingRect.top - this.highlightPadding,
+          width: this.rectangleTargetBoundingRect.right - this.rectangleTargetBoundingRect.left + 2 * this.highlightPadding,
+          height: this.rectangleTargetBoundingRect.bottom - this.rectangleTargetBoundingRect.top + 2 * this.highlightPadding
         };
         return rectangle;
       } else {
@@ -769,7 +782,7 @@ var hash_sum_default = /*#__PURE__*/__webpack_require__.n(hash_sum);
       if (this.circleTargetBoundingRect) {
         var circleX = Math.round(this.circleTargetBoundingRect.left + this.circleTargetBoundingRect.width / 2);
         var circleY = Math.round(this.circleTargetBoundingRect.top + this.circleTargetBoundingRect.height / 2);
-        var circleRadius = Math.sqrt(Math.pow(this.circleTargetBoundingRect.width / 2, 2) + Math.pow(this.circleTargetBoundingRect.height / 2, 2));
+        var circleRadius = Math.sqrt(Math.pow(this.circleTargetBoundingRect.width / 2, 2) + Math.pow(this.circleTargetBoundingRect.height / 2, 2)) + this.highlightPadding;
         return {
           x: circleX,
           y: circleY,
@@ -786,23 +799,16 @@ var hash_sum_default = /*#__PURE__*/__webpack_require__.n(hash_sum);
   },
   methods: {
     onResize: function onResize() {
-      console.log('onResize');
       this.computeCircle();
       this.computeRectangle();
     },
     computeCircle: function computeCircle() {
-      console.log('computeCircle');
-
       if (this.target) {
-        console.log('Target is here');
         this.circleTargetBoundingRect = this.target.getBoundingClientRect();
       }
     },
     computeRectangle: function computeRectangle() {
-      console.log('computeRectangle');
-
       if (this.target) {
-        console.log('Target is here');
         this.rectangleTargetBoundingRect = this.target.getBoundingClientRect();
       }
     }
@@ -819,7 +825,6 @@ var hash_sum_default = /*#__PURE__*/__webpack_require__.n(hash_sum);
 
       new popper["a" /* default */](targetElement, this.$refs['v-step-' + this.hash], this.params);
       this.target = targetElement;
-      console.log('mounted');
       this.computeCircle();
       this.computeRectangle();
     } else {
@@ -828,13 +833,13 @@ var hash_sum_default = /*#__PURE__*/__webpack_require__.n(hash_sum);
     }
   }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-667d84a9","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VStep.vue
-var VStep_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"v-step-parent"},[_c('div',{ref:'v-step-' + _vm.hash,staticClass:"v-step",attrs:{"id":'v-step-' + _vm.hash}},[_vm._t("header",[(_vm.step.header)?_c('div',{staticClass:"v-step__header"},[(_vm.step.header.title)?_c('div',{domProps:{"innerHTML":_vm._s(_vm.step.header.title)}}):_vm._e()]):_vm._e()]),_vm._v(" "),_vm._t("content",[_c('div',{staticClass:"v-step__content"},[(_vm.step.content)?_c('div',{domProps:{"innerHTML":_vm._s(_vm.step.content)}}):_c('div',[_vm._v("This is a demo step! The id of this step is "+_vm._s(_vm.hash)+" and it targets "+_vm._s(_vm.step.target)+".")])])]),_vm._v(" "),_vm._t("actions",[_c('div',{staticClass:"v-step__buttons"},[(!_vm.isLast)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.stop}},[_vm._v("Skip tour")]):_vm._e(),_vm._v(" "),(!_vm.isFirst)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.previousStep}},[_vm._v("Previous")]):_vm._e(),_vm._v(" "),(!_vm.isLast)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.nextStep}},[_vm._v("Next")]):_vm._e(),_vm._v(" "),(_vm.isLast)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.stop}},[_vm._v("Finish")]):_vm._e()])]),_vm._v(" "),_c('div',{staticClass:"v-step__arrow",class:{ 'v-step__arrow--dark': _vm.step.header && _vm.step.header.title }})],2),_vm._v(" "),(_vm.hasCircleHighlight)?_c('v-circlemask',{staticClass:"mask",attrs:{"circle":_vm.circle}}):_vm._e(),_vm._v(" "),(_vm.hasRectangleHighlight)?_c('v-rectanglemask',{staticClass:"mask",attrs:{"rectangle":_vm.rectangle}}):_vm._e()],1)}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-7edc60e5","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VStep.vue
+var VStep_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"v-step-parent"},[_c('div',{ref:'v-step-' + _vm.hash,staticClass:"v-step",attrs:{"id":'v-step-' + _vm.hash}},[_vm._t("header",[(_vm.step.header)?_c('div',{staticClass:"v-step__header"},[(_vm.step.header.title)?_c('div',{domProps:{"innerHTML":_vm._s(_vm.step.header.title)}}):_vm._e()]):_vm._e()]),_vm._v(" "),_vm._t("content",[_c('div',{staticClass:"v-step__content"},[(_vm.step.content)?_c('div',{domProps:{"innerHTML":_vm._s(_vm.step.content)}}):_c('div',[_vm._v("This is a demo step! The id of this step is "+_vm._s(_vm.hash)+" and it targets "+_vm._s(_vm.step.target)+".")])])]),_vm._v(" "),_vm._t("actions",[_c('div',{staticClass:"v-step__buttons"},[(!_vm.isLast)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.stop}},[_vm._v("Skip tour")]):_vm._e(),_vm._v(" "),(!_vm.isFirst)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.previousStep}},[_vm._v("Previous")]):_vm._e(),_vm._v(" "),(!_vm.isLast)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.nextStep}},[_vm._v("Next")]):_vm._e(),_vm._v(" "),(_vm.isLast)?_c('button',{staticClass:"v-step__button",on:{"click":_vm.stop}},[_vm._v("Finish")]):_vm._e()])]),_vm._v(" "),_c('div',{staticClass:"v-step__arrow",class:{ 'v-step__arrow--dark': _vm.step.header && _vm.step.header.title }})],2),_vm._v(" "),(_vm.hasCircleHighlight)?_c('v-circlemask',{staticClass:"mask",attrs:{"circle":_vm.circle,"overlay-background":_vm.highlightBackground}}):_vm._e(),_vm._v(" "),(_vm.hasRectangleHighlight)?_c('v-rectanglemask',{staticClass:"mask",attrs:{"rectangle":_vm.rectangle,"overlay-background":_vm.highlightBackground}}):_vm._e()],1)}
 var VStep_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/components/VStep.vue
 function injectStyle (context) {
-  __webpack_require__("dMx6")
+  __webpack_require__("gOek")
 }
 /* script */
 
@@ -846,7 +851,7 @@ var VStep___vue_template_functional__ = false
 /* styles */
 var VStep___vue_styles__ = injectStyle
 /* scopeId */
-var VStep___vue_scopeId__ = "data-v-667d84a9"
+var VStep___vue_scopeId__ = "data-v-7edc60e5"
 /* moduleIdentifier (server only) */
 var VStep___vue_module_identifier__ = null
 
@@ -861,6 +866,57 @@ var VStep_Component = normalizeComponent(
 )
 
 /* harmony default export */ var components_VStep = (VStep_Component.exports);
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"/home/pierre/Developpements/git/vue-tour/node_modules/.cache/cache-loader"}!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/mixins/Background.vue
+//
+//
+//
+/* harmony default export */ var Background = ({
+  props: {
+    overlayBackground: {
+      type: String,
+      required: false,
+      default: function _default() {
+        return 'rgba(0, 0, 0, 0.75)';
+      }
+    }
+  },
+  computed: {
+    style: function style() {
+      return "background-color: ".concat(this.overlayBackground);
+    }
+  }
+});
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-b8204f18","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/mixins/Background.vue
+var Background_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c("div")}
+var Background_staticRenderFns = []
+
+// CONCATENATED MODULE: ./src/mixins/Background.vue
+/* script */
+
+
+/* template */
+
+/* template functional */
+var Background___vue_template_functional__ = false
+/* styles */
+var Background___vue_styles__ = null
+/* scopeId */
+var Background___vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var Background___vue_module_identifier__ = null
+
+var Background_Component = normalizeComponent(
+  Background,
+  Background_render,
+  Background_staticRenderFns,
+  Background___vue_template_functional__,
+  Background___vue_styles__,
+  Background___vue_scopeId__,
+  Background___vue_module_identifier__
+)
+
+/* harmony default export */ var mixins_Background = (Background_Component.exports);
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"/home/pierre/Developpements/git/vue-tour/node_modules/.cache/cache-loader"}!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/CircleMask.vue
 //
@@ -877,8 +933,10 @@ var VStep_Component = normalizeComponent(
 //
 //
 //
+
 /* harmony default export */ var CircleMask = ({
   name: 'v-circlemask',
+  mixins: [mixins_Background],
   props: {
     circle: {
       type: Object,
@@ -918,13 +976,13 @@ var VStep_Component = normalizeComponent(
     }
   }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-869d8764","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/CircleMask.vue
-var CircleMask_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"parent"},[_c('div',{ref:"overlay",staticClass:"overlay"},[_c('svg',{attrs:{"xmlns":"http://www.w3.org/2000/svg"}},[_c('def',[_c('clipPath',{attrs:{"id":"svgPath"}},[_c('path',{attrs:{"d":_vm.svgPath}})])])],1)])])}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-17630c3e","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/CircleMask.vue
+var CircleMask_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"parent"},[_c('div',{ref:"overlay",staticClass:"overlay",style:(_vm.style)},[_c('svg',{attrs:{"xmlns":"http://www.w3.org/2000/svg"}},[_c('def',[_c('clipPath',{attrs:{"id":"svgPath"}},[_c('path',{attrs:{"d":_vm.svgPath}})])])],1)])])}
 var CircleMask_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/components/CircleMask.vue
 function CircleMask_injectStyle (context) {
-  __webpack_require__("URaZ")
+  __webpack_require__("f1+d")
 }
 /* script */
 
@@ -936,7 +994,7 @@ var CircleMask___vue_template_functional__ = false
 /* styles */
 var CircleMask___vue_styles__ = CircleMask_injectStyle
 /* scopeId */
-var CircleMask___vue_scopeId__ = "data-v-869d8764"
+var CircleMask___vue_scopeId__ = "data-v-17630c3e"
 /* moduleIdentifier (server only) */
 var CircleMask___vue_module_identifier__ = null
 
@@ -967,8 +1025,10 @@ var CircleMask_Component = normalizeComponent(
 //
 //
 //
+
 /* harmony default export */ var RectangleMask = ({
   name: 'v-rectanglemask',
+  mixins: [mixins_Background],
   props: {
     rectangle: {
       type: Object,
@@ -1004,13 +1064,13 @@ var CircleMask_Component = normalizeComponent(
     }
   }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-208e4450","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/RectangleMask.vue
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-1d120e5e","hasScoped":true,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/RectangleMask.vue
 var RectangleMask_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"parent"},[_c('div',{ref:"overlay",staticClass:"overlay"},[_c('svg',{attrs:{"xmlns":"http://www.w3.org/2000/svg"}},[_c('def',[_c('clipPath',{attrs:{"id":"svgPath"}},[_c('path',{attrs:{"d":_vm.svgPath}})])])],1)])])}
 var RectangleMask_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/components/RectangleMask.vue
 function RectangleMask_injectStyle (context) {
-  __webpack_require__("MUPu")
+  __webpack_require__("xDb9")
 }
 /* script */
 
@@ -1022,7 +1082,7 @@ var RectangleMask___vue_template_functional__ = false
 /* styles */
 var RectangleMask___vue_styles__ = RectangleMask_injectStyle
 /* scopeId */
-var RectangleMask___vue_scopeId__ = "data-v-208e4450"
+var RectangleMask___vue_scopeId__ = "data-v-1d120e5e"
 /* moduleIdentifier (server only) */
 var RectangleMask___vue_module_identifier__ = null
 
@@ -1195,13 +1255,6 @@ module.exports = function (it) {
   return typeof it === 'object' ? it !== null : typeof it === 'function';
 };
 
-
-/***/ }),
-
-/***/ "URaZ":
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ }),
 
@@ -3713,7 +3766,7 @@ module.exports = !__webpack_require__("zgIt")(function () {
 
 /***/ }),
 
-/***/ "dMx6":
+/***/ "f1+d":
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
@@ -3732,6 +3785,13 @@ module.exports = function (bitmap, value) {
   };
 };
 
+
+/***/ }),
+
+/***/ "gOek":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ }),
 
@@ -3935,6 +3995,13 @@ module.exports = function (key) {
   return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
 };
 
+
+/***/ }),
+
+/***/ "xDb9":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ }),
 

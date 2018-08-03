@@ -19,15 +19,14 @@ new Vue({
           target: '#v-step-0',
           content: `Discover <strong>Vue Tour</strong>!`,
           params: {
-            shape: 'rectangle'
+            overlayShape: 'rectangle',
+            overlayPadding: 8,
+            overlayBackground: 'rgba(0, 255, 0, 0.50)'
           }
         },
         {
           target: '#v-step-1',
           content: 'An awesome plugin made with Vue.js!',
-          params: {
-            shape: 'circle'
-          }
         }
       ]
     }

@@ -89,7 +89,8 @@ Once this is done and your steps correctly target some DOM elements of your appl
 this.$tours['myTour'].start()
 ```
 
-For each step, you can choose to highlight the selected element by setting the step's shape param as 'rectangle', 'circle', or 'none', which is the default value. If you choose to do so, you must call the vTour's onResize() method when the window is resized.
+For each step, you can choose to highlight the selected element by setting the step's overlayShape param as 'rectangle', 'circle', or 'none', which is the default value.
+You can also set an optionnal overlayPadding in pixels and an overlayBackground as a CSS background property string in the steps' params.
 
 For a more detailed documentation, checkout the [docs for vue-tour](https://pulsar.gitbooks.io/vue-tour/).
 
