@@ -126,21 +126,16 @@ export default {
   },
   methods: {
     onResize () {
-      console.log('onResize')
       this.computeCircle()
       this.computeRectangle()
     },
     computeCircle () {
-      console.log('computeCircle')
       if (this.target) {
-        console.log('Target is here')
         this.circleTargetBoundingRect = this.target.getBoundingClientRect()
       }
     },
     computeRectangle () {
-      console.log('computeRectangle')
       if (this.target) {
-        console.log('Target is here')
         this.rectangleTargetBoundingRect = this.target.getBoundingClientRect()
       }
     }
@@ -162,7 +157,6 @@ export default {
       )
 
       this.target = targetElement
-      console.log('mounted')
       this.computeCircle()
       this.computeRectangle()
     } else {
