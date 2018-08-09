@@ -2,11 +2,11 @@
   <div class="parent">
     <div class="overlay" ref="overlay" :style="style">
       <svg xmlns="http://www.w3.org/2000/svg">
-        <def>
+        <defs>
           <clipPath id="svgPath">
             <path :d="svgPath" />
           </clipPath>
-        </def>
+        </defs>
       </svg>
     </div>
   </div>
