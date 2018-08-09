@@ -1,10 +1,10 @@
 <template>
   <div class="parent">
-    <div class="overlay" ref="overlay">
+    <div class="overlay" ref="overlay" :style="style">
       <svg xmlns="http://www.w3.org/2000/svg">
         <defs>
           <clipPath id="svgPath">
-            <polygon :points="points" />
+            <path :d="path" />
           </clipPath>
         </defs>
       </svg>
@@ -33,7 +33,7 @@ export default {
     }
   },
   computed: {
-    points: function () {
+    path: function () {
       // This bounding rect declaration is disgusting
       // but this is the only way I found to make it work
       let boundingRect = {
@@ -50,18 +50,19 @@ export default {
       const overlayWidth = boundingRect.right - boundingRect.left
       const overlayHeight = boundingRect.bottom - boundingRect.top
 
-      const points = '0 0, ' +
-                     `0 ${overlayHeight}, ` +
-                     `${this.rectangle.x} ${overlayHeight}, ` +
-                     `${this.rectangle.x} ${this.rectangle.y}, ` +
-                     `${this.rectangle.x + this.rectangle.width} ${this.rectangle.y}, ` +
-                     `${this.rectangle.x + this.rectangle.width} ${this.rectangle.y + this.rectangle.height}, ` +
-                     `${this.rectangle.x} ${this.rectangle.y + this.rectangle.height}, ` +
-                     `${this.rectangle.x} ${overlayHeight}, ` +
-                     `${overlayWidth} ${overlayHeight}, ` +
-                     `${overlayWidth} 0, ` +
-                     '0, 0'
-      return points
+      const path = `M ${this.rectangle.x} ${this.rectangle.y} ` +
+                  `l 0 ${this.rectangle.height} ` +
+                  `l ${this.rectangle.width} 0 ` +
+                  `l 0 -${this.rectangle.height} ` +
+                  `l -${this.rectangle.width} 0 ` +
+                  `L ${this.rectangle.x} 0 ` +
+                  `L ${overlayWidth} 0 ` +
+                  `L ${overlayWidth} ${overlayHeight} ` +
+                  `L 0 ${overlayHeight} ` +
+                  'L 0 0 ' +
+                  `L ${this.rectangle.x} 0 ` +
+                  'Z'
+      return path
     }
   }
 }
@@ -85,6 +86,6 @@ export default {
     background-color: rgba(0, 0, 0, 0.75);
     clip-path: url(#svgPath);
     -webkit-clip-path: url(#svgPath);
-    pointer-events: visiblePainted;
+    pointer-events: none;
   }
 </style>
